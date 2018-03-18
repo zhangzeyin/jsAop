@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+ </head>
+ <body>
+
+ 
+	 <input onclick="Person(1,'frdfdxfd')" type="button" value="测试"/>
+	  <script type="text/javascript">
+			function Person(a,c){
+				 
+					console.log("我的名字叫做,"+c+"专注于...");
+			   return false;
+			}
+			
+	  
+			(function() {
+				//AOP（面向切面编程）的javaScript实现
+				jsAOP = {
+					/**
+					 * target 切入的目标对象
+					 * method 切入的目标函数（相对于target）
+					 * advice 切入点执行函数
+					 * **/
+					before:function(target,advice){
+						//备份原函数
+						var original  = target;
+						target = function(){
+							var rel = advice(arguments);
+							if(!rel&&rel!=undefined){
+								return false;
+							}
+	  
+							return original.apply(target, arguments);
+							
+								
+							
+						};
+						return target
+					},
+					after:function(target,advice){
+						var original  = target;
+						target = function(){
+								
+						   var rel =original.apply(target, arguments);
+					 
+						  
+						return advice(rel);
+						};
+						return target
+					},
+					around:function(target,advice){
+						var original  = target;
+						target = function(){
+						   var rel = advice(arguments);
+							if(!rel&&rel!=undefined){	
+									return false;
+							}
+							rel = original.apply(target, arguments);
+							return advice(rel);
+						};
+						return target
+					}
+				};
+			}());
+			
+	  
+	  
+			
+			window.onload = function(){
+				// around 可以替代 before after，建议最好不要同时使用
+	  
+			   //before可以获取参数 拦截方法执行 可以给参数赋值
+				Person = jsAOP.before(Person,function(parameter) {
+					console.log("请你介绍一下自己！");
+				parameter[1]="ccccccccc";
+				
+				});
+				//after获取方法返回值
+				Person = jsAOP.after(Person,function(rel) {
+					alert(rel)
+					console.log("嗯，不错，明天来上班吧！");
+					return 1;
+				});
+				//around可以获取参数 拦截方法执行 获取方法返回值
+				Person = jsAOP.around(Person,function(data) {
+					var index = -1;
+					return function(data) {
+						index++;
+						if(index == 0) {
+							alert(data);
+							console.log("介绍开始！");
+							
+						}else{
+							alert(data);
+							console.log("介绍结束！");
+							index = -1;
+						}
+					};
+	  
+				}());
+	  
+	  
+				
+				
+			};
+	  
+	  </script> 
+ </body>
+</html>
